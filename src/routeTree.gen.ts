@@ -17,6 +17,8 @@ import { Route as DemoTableRouteImport } from './routes/demo.table'
 import { Route as DemoStoreRouteImport } from './routes/demo.store'
 import { Route as DemoMcpTodosRouteImport } from './routes/demo.mcp-todos'
 import { Route as DemoDbChatRouteImport } from './routes/demo.db-chat'
+import { Route as authSignupRouteImport } from './routes/(auth)/signup'
+import { Route as authLoginRouteImport } from './routes/(auth)/login'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo.start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo.start.api-request'
 import { Route as DemoSentryTestingRouteImport } from './routes/demo.sentry.testing'
@@ -27,6 +29,7 @@ import { ServerRoute as DemoDbChatApiServerRouteImport } from './routes/demo.db-
 import { ServerRoute as ApiMcpTodosServerRouteImport } from './routes/api.mcp-todos'
 import { ServerRoute as ApiDemoTqTodosServerRouteImport } from './routes/api.demo-tq-todos'
 import { ServerRoute as ApiDemoNamesServerRouteImport } from './routes/api.demo-names'
+import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth/$'
 
 const rootServerRouteImport = createServerRootRoute()
 
@@ -58,6 +61,16 @@ const DemoMcpTodosRoute = DemoMcpTodosRouteImport.update({
 const DemoDbChatRoute = DemoDbChatRouteImport.update({
   id: '/demo/db-chat',
   path: '/demo/db-chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authSignupRoute = authSignupRouteImport.update({
+  id: '/(auth)/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authLoginRoute = authLoginRouteImport.update({
+  id: '/(auth)/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
@@ -110,9 +123,16 @@ const ApiDemoNamesServerRoute = ApiDemoNamesServerRouteImport.update({
   path: '/api/demo-names',
   getParentRoute: () => rootServerRouteImport,
 } as any)
+const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login': typeof authLoginRoute
+  '/signup': typeof authSignupRoute
   '/demo/db-chat': typeof DemoDbChatRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
   '/demo/store': typeof DemoStoreRoute
@@ -126,6 +146,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof authLoginRoute
+  '/signup': typeof authSignupRoute
   '/demo/db-chat': typeof DemoDbChatRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
   '/demo/store': typeof DemoStoreRoute
@@ -140,6 +162,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/(auth)/login': typeof authLoginRoute
+  '/(auth)/signup': typeof authSignupRoute
   '/demo/db-chat': typeof DemoDbChatRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
   '/demo/store': typeof DemoStoreRoute
@@ -155,6 +179,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/login'
+    | '/signup'
     | '/demo/db-chat'
     | '/demo/mcp-todos'
     | '/demo/store'
@@ -168,6 +194,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/login'
+    | '/signup'
     | '/demo/db-chat'
     | '/demo/mcp-todos'
     | '/demo/store'
@@ -181,6 +209,8 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/(auth)/login'
+    | '/(auth)/signup'
     | '/demo/db-chat'
     | '/demo/mcp-todos'
     | '/demo/store'
@@ -195,6 +225,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  authLoginRoute: typeof authLoginRoute
+  authSignupRoute: typeof authSignupRoute
   DemoDbChatRoute: typeof DemoDbChatRoute
   DemoMcpTodosRoute: typeof DemoMcpTodosRoute
   DemoStoreRoute: typeof DemoStoreRoute
@@ -212,6 +244,7 @@ export interface FileServerRoutesByFullPath {
   '/api/demo-tq-todos': typeof ApiDemoTqTodosServerRoute
   '/api/mcp-todos': typeof ApiMcpTodosServerRoute
   '/demo/db-chat-api': typeof DemoDbChatApiServerRoute
+  '/api/auth/$': typeof ApiAuthSplatServerRoute
 }
 export interface FileServerRoutesByTo {
   '/mcp': typeof McpServerRoute
@@ -219,6 +252,7 @@ export interface FileServerRoutesByTo {
   '/api/demo-tq-todos': typeof ApiDemoTqTodosServerRoute
   '/api/mcp-todos': typeof ApiMcpTodosServerRoute
   '/demo/db-chat-api': typeof DemoDbChatApiServerRoute
+  '/api/auth/$': typeof ApiAuthSplatServerRoute
 }
 export interface FileServerRoutesById {
   __root__: typeof rootServerRouteImport
@@ -227,6 +261,7 @@ export interface FileServerRoutesById {
   '/api/demo-tq-todos': typeof ApiDemoTqTodosServerRoute
   '/api/mcp-todos': typeof ApiMcpTodosServerRoute
   '/demo/db-chat-api': typeof DemoDbChatApiServerRoute
+  '/api/auth/$': typeof ApiAuthSplatServerRoute
 }
 export interface FileServerRouteTypes {
   fileServerRoutesByFullPath: FileServerRoutesByFullPath
@@ -236,6 +271,7 @@ export interface FileServerRouteTypes {
     | '/api/demo-tq-todos'
     | '/api/mcp-todos'
     | '/demo/db-chat-api'
+    | '/api/auth/$'
   fileServerRoutesByTo: FileServerRoutesByTo
   to:
     | '/mcp'
@@ -243,6 +279,7 @@ export interface FileServerRouteTypes {
     | '/api/demo-tq-todos'
     | '/api/mcp-todos'
     | '/demo/db-chat-api'
+    | '/api/auth/$'
   id:
     | '__root__'
     | '/mcp'
@@ -250,6 +287,7 @@ export interface FileServerRouteTypes {
     | '/api/demo-tq-todos'
     | '/api/mcp-todos'
     | '/demo/db-chat-api'
+    | '/api/auth/$'
   fileServerRoutesById: FileServerRoutesById
 }
 export interface RootServerRouteChildren {
@@ -258,6 +296,7 @@ export interface RootServerRouteChildren {
   ApiDemoTqTodosServerRoute: typeof ApiDemoTqTodosServerRoute
   ApiMcpTodosServerRoute: typeof ApiMcpTodosServerRoute
   DemoDbChatApiServerRoute: typeof DemoDbChatApiServerRoute
+  ApiAuthSplatServerRoute: typeof ApiAuthSplatServerRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -302,6 +341,20 @@ declare module '@tanstack/react-router' {
       path: '/demo/db-chat'
       fullPath: '/demo/db-chat'
       preLoaderRoute: typeof DemoDbChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/signup': {
+      id: '/(auth)/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof authSignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/login': {
+      id: '/(auth)/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof authLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/start/server-funcs': {
@@ -378,11 +431,20 @@ declare module '@tanstack/react-start/server' {
       preLoaderRoute: typeof ApiDemoNamesServerRouteImport
       parentRoute: typeof rootServerRouteImport
     }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  authLoginRoute: authLoginRoute,
+  authSignupRoute: authSignupRoute,
   DemoDbChatRoute: DemoDbChatRoute,
   DemoMcpTodosRoute: DemoMcpTodosRoute,
   DemoStoreRoute: DemoStoreRoute,
@@ -403,6 +465,7 @@ const rootServerRouteChildren: RootServerRouteChildren = {
   ApiDemoTqTodosServerRoute: ApiDemoTqTodosServerRoute,
   ApiMcpTodosServerRoute: ApiMcpTodosServerRoute,
   DemoDbChatApiServerRoute: DemoDbChatApiServerRoute,
+  ApiAuthSplatServerRoute: ApiAuthSplatServerRoute,
 }
 export const serverRouteTree = rootServerRouteImport
   ._addFileChildren(rootServerRouteChildren)

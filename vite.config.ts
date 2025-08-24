@@ -14,6 +14,9 @@ const config = defineConfig({
     }),
     tailwindcss(),
     tanstackStart({
+      spa: {
+        enabled: false,
+      },
       customViteReactPlugin: true,
     }),
     viteReact(),
